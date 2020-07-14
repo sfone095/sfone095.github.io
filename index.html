@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapbox</title>
+
+
+    <script src='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css' rel='stylesheet' />
+
+</head>
+
+<body>
+    <div id='map' style='width: 100vw; height: 100vh;'></div>
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1Ijoic2ZvbmUwOTUiLCJhIjoiY2tjaGF4MjlzMGVreTJxbzBobXVwdmhueSJ9.w6186KYrTeCJ313pC6SqRg';
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
+            center: [106.7486, 10.7857], // starting position [lng, lat]
+            zoom: 11 // starting zoom
+        });
+
+        map.on('load', function () {
+            map.addSource('districts', {
+                type: 'geojson',
+                data: 'features.geojson'
+            });
+
+            map.addLayer({
+                'id': 'all',
+                'type': 'fill',
+                'source': 'districts'
+            });
+
+            map.addLayer({
+                'id': 'district_4',
+                'type': 'fill',
+                'source': 'districts',
+                'filter': ['==', ['get', 'name'], "District 4"],
+                'paint': {
+                    'fill-color': '#009900',
+                    'fill-opacity': 0.8
+                }
+            });
+
+            map.addLayer({
+                'id': 'district_9',
+                'type': 'fill',
+                'source': 'districts',
+                'filter': ['==', ['get', 'name'], "District 9"],
+                'paint': {
+                    'fill-color': '#0099FF',
+                    'fill-opacity': 0.8
+                }
+            });
+
+            map.addLayer({
+                'id': 'district_2',
+                'type': 'fill',
+                'source': 'districts',
+                'filter': ['==', ['get', 'name'], "Quận 2"],
+                'paint': {
+                    'fill-color': '#00CCFF',
+                    'fill-opacity': 0.8
+                }
+            });
+
+            map.addLayer({
+                'id': 'district_binh_thanh',
+                'type': 'fill',
+                'source': 'districts',
+                'filter': ['==', ['get', 'name'], "Binh Thanh District"],
+                'paint': {
+                    'fill-color': '#330000',
+                    'fill-opacity': 0.8
+                }
+            });
+
+            map.addLayer({
+                'id': 'district_phu_nhuan',
+                'type': 'fill',
+                'source': 'districts',
+                'filter': ['==', ['get', 'name'], "Quận Phú Nhuận"],
+                'paint': {
+                    'fill-color': '#336600',
+                    'fill-opacity': 0.8
+                }
+            });
+
+            map.addLayer({
+                'id': 'district_1',
+                'type': 'fill',
+                'source': 'districts',
+                'filter': ['==', ['get', 'name'], "District 1"],
+                'paint': {
+                    'fill-color': '#663300',
+                    'fill-opacity': 0.8
+                }
+            });
+
+            map.addLayer({
+                'id': 'district_3',
+                'type': 'fill',
+                'source': 'districts',
+                'filter': ['==', ['get', 'name'], "District 3"],
+                'paint': {
+                    'fill-color': '#669900',
+                    'fill-opacity': 0.8
+                }
+            });
+
+            map.addLayer({
+                'id': 'district_5',
+                'type': 'fill',
+                'source': 'districts',
+                'filter': ['==', ['get', 'name'], "District 5"],
+                'paint': {
+                    'fill-color': '#6633FF',
+                    'fill-opacity': 0.8
+                }
+            });
+
+            map.addLayer({
+                'id': 'district_7',
+                'type': 'fill',
+                'source': 'districts',
+                'filter': ['==', ['get', 'name'], "District 7"],
+                'paint': {
+                    'fill-color': '#990000',
+                    'fill-opacity': 0.8
+                }
+            });
+
+            map.on('click', 'all', function (e) {
+                var info = e.features[0].properties.info
+
+                if (!info) {
+                    return
+                }
+
+                var coordinates = e.lngLat;
+
+                new mapboxgl.Popup()
+                    .setLngLat(coordinates)
+                    .setHTML(info)
+                    .addTo(map);
+            })
+
+            // Change the cursor to a pointer when the mouse is over the places layer.
+            map.on('mouseenter', 'all', function () {
+                map.getCanvas().style.cursor = 'pointer';
+            });
+
+            // Change it back to a pointer when it leaves.
+            map.on('mouseleave', 'all', function () {
+                map.getCanvas().style.cursor = '';
+            });
+        })
+    </script>
+</body>
+
+</html>
