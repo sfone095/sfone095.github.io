@@ -87,6 +87,8 @@
     </style>
     <script>
         var districts
+        var layers = ['2,549 - 9.602', '9,602 - 16,654', '16,654 - 23,706', '23,706 - 30,758', '30,758 - 37,811', '37,811 - 44,863'];
+        var colors = ['#fcfbcf', '#dbeea3', '#afde92', '#86c887', '#47ab60', '#277548'];
 
         // setInterval(() => {
         //     axios({
@@ -96,13 +98,6 @@
         //         districts = response.data.rows
         //     })
         // }, 10000);
-
-        axios({
-            method: 'GET',
-            url: 'http://gsx2json.com/api?id=1fDmYwz0pXIkomNGI_l-mTVLnZ9mThkiXi0blVY2N1as&sheet=1'
-        }).then(function (response) {
-            districts = response.data.rows
-        })
     </script>
 </head>
 
@@ -113,309 +108,342 @@
     </div>
     <div class='map-overlay' id='legend'></div>
     <script>
-        mapboxgl.accessToken = 'pk.eyJ1Ijoic2ZvbmUwOTUiLCJhIjoiY2tjaGF4MjlzMGVreTJxbzBobXVwdmhueSJ9.w6186KYrTeCJ313pC6SqRg';
-        var map = new mapboxgl.Map({
-            container: 'map',
-            style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
-            center: [106.7486, 10.7857], // starting position [lng, lat]
-            zoom: 11 // starting zoom
-        });
+        axios({
+            method: 'GET',
+            url: 'http://gsx2json.com/api?id=1fDmYwz0pXIkomNGI_l-mTVLnZ9mThkiXi0blVY2N1as&sheet=1'
+        }).then(function (response) {
+            districts = response.data.rows
 
-        map.on('load', function () {
-            map.addSource('districts', {
-                type: 'geojson',
-                data: 'features.geojson'
+            mapboxgl.accessToken = 'pk.eyJ1Ijoic2ZvbmUwOTUiLCJhIjoiY2tjaGF4MjlzMGVreTJxbzBobXVwdmhueSJ9.w6186KYrTeCJ313pC6SqRg';
+            var map = new mapboxgl.Map({
+                container: 'map',
+                style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
+                center: [106.7486, 10.7857], // starting position [lng, lat]
+                zoom: 11 // starting zoom
             });
 
-            map.addLayer({
-                'id': 'all',
-                'type': 'fill',
-                'source': 'districts',
-                'paint': {
-                    'fill-color': '#fff',
-                    'fill-opacity': 0
+            map.on('load', function () {
+                map.addSource('districts', {
+                    type: 'geojson',
+                    data: 'features.geojson'
+                });
+
+                map.addLayer({
+                    'id': 'all',
+                    'type': 'fill',
+                    'source': 'districts',
+                    'paint': {
+                        'fill-color': '#fff',
+                        'fill-opacity': 0
+                    }
+                });
+
+                districts.forEach(function (item) {
+                    var density = item.densitypopm2
+
+                    if (density <= 9602) {
+                        color = colors[0]
+                    } else if (density <= 16654) {
+                        color = colors[1]
+                    } else if (density <= 23706) {
+                        color = colors[2]
+                    } else if (density <= 30758) {
+                        color = colors[3]
+                    } else if (density <= 37811) {
+                        color = colors[4]
+                    } else {
+                        color = colors[5]
+                    }
+
+                    map.addLayer({
+                        'id': `district_${item.no}`,
+                        'type': 'fill',
+                        'source': 'districts',
+                        'filter': ['==', ['get', 'name'], `${item.district}`],
+                        'paint': {
+                            'fill-color': color,
+                            'fill-opacity': 0.8,
+                            'fill-outline-color': 'rgba(20, 100, 25, 1)'
+                        }
+                    });
+                })
+
+                // map.addLayer({
+                //     'id': 'district_4',
+                //     'type': 'fill',
+                //     'source': 'districts',
+                //     'filter': ['==', ['get', 'name'], "4"],
+                //     'paint': {
+                //         'fill-color': '#508866',
+                //         'fill-opacity': 0.8,
+                //         'fill-outline-color': 'rgba(20, 100, 25, 1)'
+                //     }
+                // });
+
+                // map.addLayer({
+                //     'id': 'district_9',
+                //     'type': 'fill',
+                //     'source': 'districts',
+                //     'filter': ['==', ['get', 'name'], "9"],
+                //     'paint': {
+                //         'fill-color': '#f7f8d2',
+                //         'fill-opacity': 0.7,
+                //         'fill-outline-color': 'rgba(20, 100, 25, 1)'
+                //     }
+                // });
+
+                // map.addLayer({
+                //     'id': 'district_2',
+                //     'type': 'fill',
+                //     'source': 'districts',
+                //     'filter': ['==', ['get', 'name'], "2"],
+                //     'paint': {
+                //         'fill-color': '#f7f8d2',
+                //         'fill-opacity': 0.8,
+                //         'fill-outline-color': 'rgba(20, 100, 25, 1)'
+                //     }
+                // });
+
+                // map.addLayer({
+                //     'id': 'district_8',
+                //     'type': 'fill',
+                //     'source': 'districts',
+                //     'filter': ['==', ['get', 'name'], "8"],
+                //     'paint': {
+                //         'fill-color': '#c0e2a7',
+                //         'fill-opacity': 0.8,
+                //         'fill-outline-color': 'rgba(20, 100, 25, 1)'
+                //     }
+                // });
+
+                // map.addLayer({
+                //     'id': 'district_binh_thanh',
+                //     'type': 'fill',
+                //     'source': 'districts',
+                //     'filter': ['==', ['get', 'name'], "Binh Thanh"],
+                //     'paint': {
+                //         'fill-color': '#c0e2a7',
+                //         'fill-opacity': 0.8,
+                //         'fill-outline-color': 'rgba(20, 100, 25, 1)'
+                //     }
+                // });
+
+                // map.addLayer({
+                //     'id': 'district_tan_binh',
+                //     'type': 'fill',
+                //     'source': 'districts',
+                //     'filter': ['==', ['get', 'name'], "Tan Binh"],
+                //     'paint': {
+                //         'fill-color': '#c0e2a7',
+                //         'fill-opacity': 0.8,
+                //         'fill-outline-color': 'rgba(20, 100, 25, 1)'
+                //     }
+                // });
+
+                // map.addLayer({
+                //     'id': 'district_thu_duc',
+                //     'type': 'fill',
+                //     'source': 'districts',
+                //     'filter': ['==', ['get', 'place_id'], 199156943],
+                //     'paint': {
+                //         'fill-color': '#e1f0b7',
+                //         'fill-opacity': 0.8,
+                //         'fill-outline-color': 'rgba(20, 100, 25, 1)'
+                //     }
+                // });
+
+                // map.addLayer({
+                //     'id': 'district_12',
+                //     'type': 'fill',
+                //     'source': 'districts',
+                //     'filter': ['==', ['get', 'name'], '12'],
+                //     'paint': {
+                //         'fill-color': '#e1f0b7',
+                //         'fill-opacity': 0.8,
+                //         'fill-outline-color': 'rgba(20, 100, 25, 1)'
+                //     }
+                // });
+
+                // map.addLayer({
+                //     'id': 'district_binh_tan',
+                //     'type': 'fill',
+                //     'source': 'districts',
+                //     'filter': ['==', ['get', 'name'], 'Binh Tan'],
+                //     'paint': {
+                //         'fill-color': '#e1f0b7',
+                //         'fill-opacity': 0.8,
+                //         'fill-outline-color': 'rgba(20, 100, 25, 1)'
+                //     }
+                // });
+
+                // map.addLayer({
+                //     'id': 'district_phu_nhuan',
+                //     'type': 'fill',
+                //     'source': 'districts',
+                //     'filter': ['==', ['get', 'name'], "Phu Nhuan"],
+                //     'paint': {
+                //         'fill-color': '#70b880',
+                //         'fill-opacity': 0.8,
+                //         'fill-outline-color': 'rgba(20, 100, 25, 1)'
+                //     }
+                // });
+
+                // map.addLayer({
+                //     'id': 'district_1',
+                //     'type': 'fill',
+                //     'source': 'districts',
+                //     'filter': ['==', ['get', 'name'], "1"],
+                //     'paint': {
+                //         'fill-color': '#93ca93',
+                //         'fill-opacity': 0.8,
+                //         'fill-outline-color': 'rgba(20, 100, 25, 1)'
+                //     }
+                // });
+
+                // map.addLayer({
+                //     'id': 'district_tan_phu',
+                //     'type': 'fill',
+                //     'source': 'districts',
+                //     'filter': ['==', ['get', 'name'], "Tan Phu"],
+                //     'paint': {
+                //         'fill-color': '#93ca93',
+                //         'fill-opacity': 0.8,
+                //         'fill-outline-color': 'rgba(20, 100, 25, 1)'
+                //     }
+                // });
+
+                // map.addLayer({
+                //     'id': 'district_3',
+                //     'type': 'fill',
+                //     'source': 'districts',
+                //     'filter': ['==', ['get', 'name'], "3"],
+                //     'paint': {
+                //         'fill-color': '#508866',
+                //         'fill-opacity': 0.8,
+                //         'fill-outline-color': 'rgba(20, 100, 25, 1)'
+                //     }
+                // });
+
+                // map.addLayer({
+                //     'id': 'district_5',
+                //     'type': 'fill',
+                //     'source': 'districts',
+                //     'filter': ['==', ['get', 'name'], "5"],
+                //     'paint': {
+                //         'fill-color': '#508866',
+                //         'fill-opacity': 0.8,
+                //         'fill-outline-color': 'rgba(20, 100, 25, 1)'
+                //     }
+                // });
+
+                // map.addLayer({
+                //     'id': 'district_10',
+                //     'type': 'fill',
+                //     'source': 'districts',
+                //     'filter': ['==', ['get', 'name'], "10"],
+                //     'paint': {
+                //         'fill-color': '#508866',
+                //         'fill-opacity': 0.8,
+                //         'fill-outline-color': 'rgba(20, 100, 25, 1)'
+                //     }
+                // });
+
+                // map.addLayer({
+                //     'id': 'district_11',
+                //     'type': 'fill',
+                //     'source': 'districts',
+                //     'filter': ['==', ['get', 'name'], "11"],
+                //     'paint': {
+                //         'fill-color': '#508866',
+                //         'fill-opacity': 0.8,
+                //         'fill-outline-color': 'rgba(20, 100, 25, 1)'
+                //     }
+                // });
+
+                // map.addLayer({
+                //     'id': 'district_7',
+                //     'type': 'fill',
+                //     'source': 'districts',
+                //     'filter': ['==', ['get', 'name'], "7"],
+                //     'paint': {
+                //         'fill-color': '#f7f8d2',
+                //         'fill-opacity': 0.8,
+                //         'fill-outline-color': 'rgba(20, 100, 25, 1)'
+                //     }
+                // });
+
+                // map.addLayer({
+                //     'id': 'district_go_vap',
+                //     'type': 'fill',
+                //     'source': 'districts',
+                //     'filter': ['==', ['get', 'name'], "Go Vap"],
+                //     'paint': {
+                //         'fill-color': '#70b880',
+                //         'fill-opacity': 0.8,
+                //         'fill-outline-color': 'rgba(20, 100, 25, 1)'
+                //     }
+                // });
+
+                // map.addLayer({
+                //     'id': 'district_6',
+                //     'type': 'fill',
+                //     'source': 'districts',
+                //     'filter': ['==', ['get', 'name'], "6"],
+                //     'paint': {
+                //         'fill-color': '#70b880',
+                //         'fill-opacity': 0.8,
+                //         'fill-outline-color': 'rgba(20, 100, 25, 1)'
+                //     }
+                // });
+
+                map.on('click', 'all', function (e) {
+                    var info = e.features[0].properties.info
+
+                    if (!info) {
+                        return
+                    }
+
+                    var item = districts.find(item => item.district == e.features[0].properties.name)
+                    var landPrice = item.averagehousingprice1mvnd
+                    var isLandPriceTrendIcon = item.comparelastmonth0up1down == 1 ? '▲' : '▼'
+                    var landPriceTrendIconColor = item.comparelastmonth0up1down == 1 ? '#11b666' : 'red'
+
+                    var landInfo = `<div><b>Land Price:</b> ${landPrice} M/m² ${item.changes}% <span style="color: ${landPriceTrendIconColor}">${isLandPriceTrendIcon}</span></div>`
+
+                    var coordinates = e.lngLat;
+
+                    new mapboxgl.Popup()
+                        .setLngLat(coordinates)
+                        .setHTML(info + landInfo)
+                        .addTo(map);
+                })
+
+                // Change the cursor to a pointer when the mouse is over the places layer.
+                map.on('mouseenter', 'all', function () {
+                    map.getCanvas().style.cursor = 'pointer';
+                });
+
+                // Change it back to a pointer when it leaves.
+                map.on('mouseleave', 'all', function () {
+                    map.getCanvas().style.cursor = '';
+                });
+
+                for (i = 0; i < layers.length; i++) {
+                    var layer = layers[i];
+                    var color = colors[i];
+                    var item = document.createElement('div');
+                    var key = document.createElement('span');
+                    key.className = 'legend-key';
+                    key.style.backgroundColor = color;
+
+                    var value = document.createElement('span');
+                    value.innerHTML = layer;
+                    item.appendChild(key);
+                    item.appendChild(value);
+                    legend.appendChild(item);
                 }
-            });
-
-            map.addLayer({
-                'id': 'district_4',
-                'type': 'fill',
-                'source': 'districts',
-                'filter': ['==', ['get', 'name'], "4"],
-                'paint': {
-                    'fill-color': '#508866',
-                    'fill-opacity': 0.8,
-                    'fill-outline-color': 'rgba(20, 100, 25, 1)'
-                }
-            });
-
-            map.addLayer({
-                'id': 'district_9',
-                'type': 'fill',
-                'source': 'districts',
-                'filter': ['==', ['get', 'name'], "9"],
-                'paint': {
-                    'fill-color': '#f7f8d2',
-                    'fill-opacity': 0.7,
-                    'fill-outline-color': 'rgba(20, 100, 25, 1)'
-                }
-            });
-
-            map.addLayer({
-                'id': 'district_2',
-                'type': 'fill',
-                'source': 'districts',
-                'filter': ['==', ['get', 'name'], "2"],
-                'paint': {
-                    'fill-color': '#f7f8d2',
-                    'fill-opacity': 0.8,
-                    'fill-outline-color': 'rgba(20, 100, 25, 1)'
-                }
-            });
-
-            map.addLayer({
-                'id': 'district_8',
-                'type': 'fill',
-                'source': 'districts',
-                'filter': ['==', ['get', 'name'], "8"],
-                'paint': {
-                    'fill-color': '#c0e2a7',
-                    'fill-opacity': 0.8,
-                    'fill-outline-color': 'rgba(20, 100, 25, 1)'
-                }
-            });
-
-            map.addLayer({
-                'id': 'district_binh_thanh',
-                'type': 'fill',
-                'source': 'districts',
-                'filter': ['==', ['get', 'name'], "Binh Thanh"],
-                'paint': {
-                    'fill-color': '#c0e2a7',
-                    'fill-opacity': 0.8,
-                    'fill-outline-color': 'rgba(20, 100, 25, 1)'
-                }
-            });
-
-            map.addLayer({
-                'id': 'district_tan_binh',
-                'type': 'fill',
-                'source': 'districts',
-                'filter': ['==', ['get', 'name'], "Tan Binh"],
-                'paint': {
-                    'fill-color': '#c0e2a7',
-                    'fill-opacity': 0.8,
-                    'fill-outline-color': 'rgba(20, 100, 25, 1)'
-                }
-            });
-
-            map.addLayer({
-                'id': 'district_thu_duc',
-                'type': 'fill',
-                'source': 'districts',
-                'filter': ['==', ['get', 'place_id'], 199156943],
-                'paint': {
-                    'fill-color': '#e1f0b7',
-                    'fill-opacity': 0.8,
-                    'fill-outline-color': 'rgba(20, 100, 25, 1)'
-                }
-            });
-
-            map.addLayer({
-                'id': 'district_12',
-                'type': 'fill',
-                'source': 'districts',
-                'filter': ['==', ['get', 'name'], '12'],
-                'paint': {
-                    'fill-color': '#e1f0b7',
-                    'fill-opacity': 0.8,
-                    'fill-outline-color': 'rgba(20, 100, 25, 1)'
-                }
-            });
-
-            map.addLayer({
-                'id': 'district_binh_tan',
-                'type': 'fill',
-                'source': 'districts',
-                'filter': ['==', ['get', 'name'], 'Binh Tan'],
-                'paint': {
-                    'fill-color': '#e1f0b7',
-                    'fill-opacity': 0.8,
-                    'fill-outline-color': 'rgba(20, 100, 25, 1)'
-                }
-            });
-
-            map.addLayer({
-                'id': 'district_phu_nhuan',
-                'type': 'fill',
-                'source': 'districts',
-                'filter': ['==', ['get', 'name'], "Phu Nhuan"],
-                'paint': {
-                    'fill-color': '#70b880',
-                    'fill-opacity': 0.8,
-                    'fill-outline-color': 'rgba(20, 100, 25, 1)'
-                }
-            });
-
-            map.addLayer({
-                'id': 'district_1',
-                'type': 'fill',
-                'source': 'districts',
-                'filter': ['==', ['get', 'name'], "1"],
-                'paint': {
-                    'fill-color': '#93ca93',
-                    'fill-opacity': 0.8,
-                    'fill-outline-color': 'rgba(20, 100, 25, 1)'
-                }
-            });
-
-            map.addLayer({
-                'id': 'district_tan_phu',
-                'type': 'fill',
-                'source': 'districts',
-                'filter': ['==', ['get', 'name'], "Tan Phu"],
-                'paint': {
-                    'fill-color': '#93ca93',
-                    'fill-opacity': 0.8,
-                    'fill-outline-color': 'rgba(20, 100, 25, 1)'
-                }
-            });
-
-            map.addLayer({
-                'id': 'district_3',
-                'type': 'fill',
-                'source': 'districts',
-                'filter': ['==', ['get', 'name'], "3"],
-                'paint': {
-                    'fill-color': '#508866',
-                    'fill-opacity': 0.8,
-                    'fill-outline-color': 'rgba(20, 100, 25, 1)'
-                }
-            });
-
-            map.addLayer({
-                'id': 'district_5',
-                'type': 'fill',
-                'source': 'districts',
-                'filter': ['==', ['get', 'name'], "5"],
-                'paint': {
-                    'fill-color': '#508866',
-                    'fill-opacity': 0.8,
-                    'fill-outline-color': 'rgba(20, 100, 25, 1)'
-                }
-            });
-
-            map.addLayer({
-                'id': 'district_10',
-                'type': 'fill',
-                'source': 'districts',
-                'filter': ['==', ['get', 'name'], "10"],
-                'paint': {
-                    'fill-color': '#508866',
-                    'fill-opacity': 0.8,
-                    'fill-outline-color': 'rgba(20, 100, 25, 1)'
-                }
-            });
-
-            map.addLayer({
-                'id': 'district_11',
-                'type': 'fill',
-                'source': 'districts',
-                'filter': ['==', ['get', 'name'], "11"],
-                'paint': {
-                    'fill-color': '#508866',
-                    'fill-opacity': 0.8,
-                    'fill-outline-color': 'rgba(20, 100, 25, 1)'
-                }
-            });
-
-            map.addLayer({
-                'id': 'district_7',
-                'type': 'fill',
-                'source': 'districts',
-                'filter': ['==', ['get', 'name'], "7"],
-                'paint': {
-                    'fill-color': '#f7f8d2',
-                    'fill-opacity': 0.8,
-                    'fill-outline-color': 'rgba(20, 100, 25, 1)'
-                }
-            });
-
-            map.addLayer({
-                'id': 'district_go_vap',
-                'type': 'fill',
-                'source': 'districts',
-                'filter': ['==', ['get', 'name'], "Go Vap"],
-                'paint': {
-                    'fill-color': '#70b880',
-                    'fill-opacity': 0.8,
-                    'fill-outline-color': 'rgba(20, 100, 25, 1)'
-                }
-            });
-
-            map.addLayer({
-                'id': 'district_6',
-                'type': 'fill',
-                'source': 'districts',
-                'filter': ['==', ['get', 'name'], "6"],
-                'paint': {
-                    'fill-color': '#70b880',
-                    'fill-opacity': 0.8,
-                    'fill-outline-color': 'rgba(20, 100, 25, 1)'
-                }
-            });
-
-            map.on('click', 'all', function (e) {
-                var info = e.features[0].properties.info
-
-                if (!info) {
-                    return
-                }
-
-                var item = districts.find(item => item.district == e.features[0].properties.name)
-                var landPrice = item.averagehousingprice1mvnd
-                var isLandPriceTrendIcon = item.comparelastmonth0up1down == 1 ? '▲' : '▼'
-                var landPriceTrendIconColor = item.comparelastmonth0up1down == 1 ? '#11b666' : 'red'
-
-                var landInfo = `<div><b>Land Price:</b> ${landPrice} M/m² ${item.changes}% <span style="color: ${landPriceTrendIconColor}">${isLandPriceTrendIcon}</span></div>`
-
-                var coordinates = e.lngLat;
-
-                new mapboxgl.Popup()
-                    .setLngLat(coordinates)
-                    .setHTML(info + landInfo)
-                    .addTo(map);
             })
 
-            // Change the cursor to a pointer when the mouse is over the places layer.
-            map.on('mouseenter', 'all', function () {
-                map.getCanvas().style.cursor = 'pointer';
-            });
-
-            // Change it back to a pointer when it leaves.
-            map.on('mouseleave', 'all', function () {
-                map.getCanvas().style.cursor = '';
-            });
-
-            var layers = ['2,549 - 9.602', '9,602 - 16,654', '16,654 - 23,706', '23,706 - 30,758', '30,758 - 37,811', '37,811 - 44,863'];
-            var colors = ['#fcfbcf', '#dbeea3', '#afde92', '#86c887', '#47ab60', '#277548'];
-
-            for (i = 0; i < layers.length; i++) {
-                var layer = layers[i];
-                var color = colors[i];
-                var item = document.createElement('div');
-                var key = document.createElement('span');
-                key.className = 'legend-key';
-                key.style.backgroundColor = color;
-
-                var value = document.createElement('span');
-                value.innerHTML = layer;
-                item.appendChild(key);
-                item.appendChild(value);
-                legend.appendChild(item);
-            }
-
-            console.log(map)
         })
     </script>
 </body>
