@@ -409,12 +409,13 @@
                     var landPriceTrendIconColor = item.comparelastmonth0up1down == 1 ? '#11b666' : 'red'
 
                     var landInfo = `<div><b>Land Price:</b> ${landPrice} M/m² ${item.changes}% <span style="color: ${landPriceTrendIconColor}">${isLandPriceTrendIcon}</span></div>`
+                    var densityInfo = `<div><b>Density:</b> ${item.densitypopm2 | 0}</div>`
 
                     var coordinates = e.lngLat;
 
                     new mapboxgl.Popup()
                         .setLngLat(coordinates)
-                        .setHTML(info + landInfo)
+                        .setHTML(info + densityInfo + landInfo)
                         .addTo(map);
                 })
 
