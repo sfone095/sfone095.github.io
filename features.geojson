@@ -4917,7 +4917,7 @@
         "icon": "https://nominatim.openstreetmap.org/images/mapicons/poi_boundary_administrative.p.20.png",
         "type": "administrative",
         "category": "boundary",
-        "info": "<div><b>District 10 (Quận 20)</b></div> <div>Vietnamese urban district</div> <hr /> <div>District 10 is an urban district of Ho Chi Minh City, the largest city in Vietnam. As of 2010, the district had a population of 232,450 and an area of 6 km². It is divided into 15 small subsets which are called wards, numbered from Ward 1 to Ward 15.</div> <div><b>Area:</b> 6 km²</div> <div><b>Population:</b> 372,450 (2013)</div>"
+        "info": "<div><b>District 10 (Quận 10)</b></div> <div>Vietnamese urban district</div> <hr /> <div>District 10 is an urban district of Ho Chi Minh City, the largest city in Vietnam. As of 2010, the district had a population of 232,450 and an area of 6 km². It is divided into 15 small subsets which are called wards, numbered from Ward 1 to Ward 15.</div> <div><b>Area:</b> 6 km²</div> <div><b>Population:</b> 372,450 (2013)</div>"
       },
       "geometry": {
         "coordinates": [
