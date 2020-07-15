@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mapbox</title>
 
-
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css' rel='stylesheet' />
     <style>
@@ -72,7 +72,7 @@
             width: 130px;
         }
 
-        #legend > div {
+        #legend>div {
             margin-bottom: 10px;
         }
 
@@ -84,11 +84,32 @@
             margin-right: 5px;
         }
     </style>
+    <script>
+        var districts
+
+        // setInterval(() => {
+        //     axios({
+        //         method: 'GET',
+        //         url: 'http://gsx2json.com/api?id=1fDmYwz0pXIkomNGI_l-mTVLnZ9mThkiXi0blVY2N1as&sheet=1'
+        //     }).then(function (response) {
+        //         districts = response.data.rows
+        //     })
+        // }, 10000);
+
+        axios({
+            method: 'GET',
+            url: 'http://gsx2json.com/api?id=1fDmYwz0pXIkomNGI_l-mTVLnZ9mThkiXi0blVY2N1as&sheet=1'
+        }).then(function (response) {
+            districts = response.data.rows
+        })
+    </script>
 </head>
 
 <body>
     <div id='map' style='width: 100vw; height: 100vh;'></div>
-    <div class='map-overlay' id='features'><h2>HCM population density</h2></div>
+    <div class='map-overlay' id='features'>
+        <h2>HCM population density</h2>
+    </div>
     <div class='map-overlay' id='legend'></div>
     <script>
         mapboxgl.accessToken = 'pk.eyJ1Ijoic2ZvbmUwOTUiLCJhIjoiY2tjaGF4MjlzMGVreTJxbzBobXVwdmhueSJ9.w6186KYrTeCJ313pC6SqRg';
@@ -350,11 +371,18 @@
                     return
                 }
 
+                var item = districts.find(item => item.district == e.features[0].properties.name)
+                var landPrice = item.averagehousingprice1mvnd
+                var isLandPriceTrendIcon = item.comparelastmonth0up1down == 1 ? '▲' : '▼'
+                var landPriceTrendIconColor = item.comparelastmonth0up1down == 1 ? '#11b666' : 'red'
+
+                var landInfo = `<div><b>Land Price:</b> ${landPrice} M/m² ${item.changes}% <span style="color: ${landPriceTrendIconColor}">${isLandPriceTrendIcon}</span></div>`
+
                 var coordinates = e.lngLat;
 
                 new mapboxgl.Popup()
                     .setLngLat(coordinates)
-                    .setHTML(info)
+                    .setHTML(info + landInfo)
                     .addTo(map);
             })
 

@@ -2110,14 +2110,14 @@
         "place_rank": 12,
         "display_name": "Thu Duc District, Ho Chi Minh City, Vietnam",
         "name": "7",
+        "info": "<div><b>District 7 (Quận 7)</b></div>                         <div>Vietnamese urban district</div>                         <hr/>                         <div>District 7 is an urban district of Ho Chi Minh City, the largest city in Vietnam. As of 2010, the district had a population of 274,828 and an area of 36 km². District 7 is connected to District 2 by the Phú Mỹ Bridge, which opened in September 2009. The Phú Mỹ Hưng New City is located in the district.</div>                         <div><b>Area:</b> 35.76 km²</div>                         <div><b>Population:</b> 324,620 (2018)</div>",
         "osm_type": "relation",
         "osm_id": 2764875,
         "place_id": 198687511,
         "importance": 1.16,
         "icon": "https://nominatim.openstreetmap.org/images/mapicons/poi_boundary_administrative.p.20.png",
         "type": "administrative",
-        "category": "boundary",
-        "info": "<div><b>District 5 (Quận 5)</b></div> <div>Vietnamese urban district</div> <hr /> <div>District 5 is anchored by Chinatown (Chợ Lớn), with hole-in-the-wall eateries serving dumplings, noodles, and roasted meat dotting its narrow back streets. Cultural landmarks include the 18th-century Bà Thiên Hậu Temple, known for its intricately carved roof, and peaceful Tam Son Pagoda. Vendors sell local produce and spices at sprawling Bình Tây Market, while An Đông Market offers textiles and handicrafts.</div> <div><b>Area:</b> 4.27 km²</div> <div><b>Population:</b> 187,510 (2018)</div>"
+        "category": "boundary"
       },
       "geometry": {
         "coordinates": [
@@ -7214,14 +7214,14 @@
         "place_rank": 12,
         "display_name": "Phu Nhuan District, Ho Chi Minh City, Vietnam",
         "name": "Phu Nhuan",
+        "info": "<div><b>Phú Nhuận</b></div> <div>Vietnamese urban district</div> <hr /> <div>Phú Nhuận is a laid-back residential district around sprawling Gia Dinh Park, with its landscaped lawns, jogging paths, and kids’ play areas. Traditional beer-and-snail eateries sit alongside upscale Vietnamese restaurants, while street food kiosks offer steamed rice rolls and soupy noodles. Stalls in Phu Nhuan market are piled high with local produce and seafood, and family-run shops sell clothing and knick-knacks.</div>",
         "osm_type": "relation",
         "osm_id": 3851694,
         "place_id": 198854353,
         "importance": 1.1500000000000001,
         "icon": "https://nominatim.openstreetmap.org/images/mapicons/poi_boundary_administrative.p.20.png",
         "type": "administrative",
-        "category": "boundary",
-        "info": "<div><b>Phú Nhuận</b></div> <div>Vietnamese urban district</div> <hr /> <div>Phú Nhuận is a laid-back residential district around sprawling Gia Dinh Park, with its landscaped lawns, jogging paths, and kids’ play areas. Traditional beer-and-snail eateries sit alongside upscale Vietnamese restaurants, while street food kiosks offer steamed rice rolls and soupy noodles. Stalls in Phu Nhuan market are piled high with local produce and seafood, and family-run shops sell clothing and knick-knacks.</div>"
+        "category": "boundary"
       },
       "geometry": {
         "coordinates": [
@@ -19562,14 +19562,14 @@
         "place_rank": 12,
         "display_name": "Go Vap District, Ho Chi Minh City, 854, Vietnam",
         "name": "Go Vap",
+        "info": "<div><b>Gò Vấp</b></div> <div>Vietnamese urban district</div> <hr /> <div>Gò Vấp is a district of Ho Chi Minh City. Since the 80s, it has undergone significant urbanization. It is larger than most of the other districts. A high urbanization rate has made Gò Vấp become one of the three districts that has high population growth in the city.</div> <div><b>Area:</b> 20 km²</div> <div><b>Population:</b> 663,313 (2017)</div>",
         "osm_type": "relation",
         "osm_id": 6908316,
         "place_id": 199124443,
         "importance": 1.1500000000000001,
         "icon": "https://nominatim.openstreetmap.org/images/mapicons/poi_boundary_administrative.p.20.png",
         "type": "administrative",
-        "category": "boundary",
-        "info": "<div><b>Gò Vấp</b></div> <div>Vietnamese urban district</div> <hr /> <div>Gò Vấp is a district of Ho Chi Minh City. Since the 80s, it has undergone significant urbanization. It is larger than most of the other districts. A high urbanization rate has made Gò Vấp become one of the three districts that has high population growth in the city.</div> <div><b>Area:</b> 20 km²</div> <div><b>Population:</b> 663,313 (2017)</div>"
+        "category": "boundary"
       },
       "geometry": {
         "coordinates": [
