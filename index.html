@@ -9,11 +9,87 @@
 
     <script src='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
 
+        h2,
+        h3 {
+            margin: 10px;
+            font-size: 1.2em;
+        }
+
+        h3 {
+            font-size: 1em;
+        }
+
+        p {
+            font-size: 0.85em;
+            margin: 10px;
+            text-align: left;
+        }
+
+        /**
+* Create a position for the map
+* on the page */
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+
+        /**
+* Set rules for how the map overlays
+* (information box and legend) will be displayed
+* on the page. */
+        .map-overlay {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.8);
+            margin-right: 20px;
+            font-family: Arial, sans-serif;
+            overflow: auto;
+            border-radius: 3px;
+        }
+
+        #features {
+            top: 0;
+            height: 40px;
+            margin-top: 20px;
+            width: 250px;
+        }
+
+        #legend {
+            padding: 10px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            line-height: 18px;
+            height: 160px;
+            margin-bottom: 40px;
+            width: 130px;
+        }
+
+        #legend > div {
+            margin-bottom: 10px;
+        }
+
+        .legend-key {
+            display: inline-block;
+            border-radius: 20%;
+            width: 10px;
+            height: 10px;
+            margin-right: 5px;
+        }
+    </style>
 </head>
 
 <body>
     <div id='map' style='width: 100vw; height: 100vh;'></div>
+    <div class='map-overlay' id='features'><h2>HCM population density</h2></div>
+    <div class='map-overlay' id='legend'></div>
     <script>
         mapboxgl.accessToken = 'pk.eyJ1Ijoic2ZvbmUwOTUiLCJhIjoiY2tjaGF4MjlzMGVreTJxbzBobXVwdmhueSJ9.w6186KYrTeCJ313pC6SqRg';
         var map = new mapboxgl.Map({
@@ -32,17 +108,22 @@
             map.addLayer({
                 'id': 'all',
                 'type': 'fill',
-                'source': 'districts'
+                'source': 'districts',
+                'paint': {
+                    'fill-color': '#fff',
+                    'fill-opacity': 0
+                }
             });
 
             map.addLayer({
                 'id': 'district_4',
                 'type': 'fill',
                 'source': 'districts',
-                'filter': ['==', ['get', 'name'], "District 4"],
+                'filter': ['==', ['get', 'name'], "4"],
                 'paint': {
-                    'fill-color': '#009900',
-                    'fill-opacity': 0.8
+                    'fill-color': '#508866',
+                    'fill-opacity': 0.8,
+                    'fill-outline-color': 'rgba(20, 100, 25, 1)'
                 }
             });
 
@@ -50,10 +131,11 @@
                 'id': 'district_9',
                 'type': 'fill',
                 'source': 'districts',
-                'filter': ['==', ['get', 'name'], "District 9"],
+                'filter': ['==', ['get', 'name'], "9"],
                 'paint': {
-                    'fill-color': '#0099FF',
-                    'fill-opacity': 0.8
+                    'fill-color': '#f7f8d2',
+                    'fill-opacity': 0.7,
+                    'fill-outline-color': 'rgba(20, 100, 25, 1)'
                 }
             });
 
@@ -61,10 +143,23 @@
                 'id': 'district_2',
                 'type': 'fill',
                 'source': 'districts',
-                'filter': ['==', ['get', 'name'], "Quận 2"],
+                'filter': ['==', ['get', 'name'], "2"],
                 'paint': {
-                    'fill-color': '#00CCFF',
-                    'fill-opacity': 0.8
+                    'fill-color': '#f7f8d2',
+                    'fill-opacity': 0.8,
+                    'fill-outline-color': 'rgba(20, 100, 25, 1)'
+                }
+            });
+
+            map.addLayer({
+                'id': 'district_8',
+                'type': 'fill',
+                'source': 'districts',
+                'filter': ['==', ['get', 'name'], "8"],
+                'paint': {
+                    'fill-color': '#c0e2a7',
+                    'fill-opacity': 0.8,
+                    'fill-outline-color': 'rgba(20, 100, 25, 1)'
                 }
             });
 
@@ -72,10 +167,59 @@
                 'id': 'district_binh_thanh',
                 'type': 'fill',
                 'source': 'districts',
-                'filter': ['==', ['get', 'localname'], "Quận Bình Thạnh"],
+                'filter': ['==', ['get', 'name'], "Binh Thanh"],
                 'paint': {
-                    'fill-color': '#ede682',
-                    'fill-opacity': 0.8
+                    'fill-color': '#c0e2a7',
+                    'fill-opacity': 0.8,
+                    'fill-outline-color': 'rgba(20, 100, 25, 1)'
+                }
+            });
+
+            map.addLayer({
+                'id': 'district_tan_binh',
+                'type': 'fill',
+                'source': 'districts',
+                'filter': ['==', ['get', 'name'], "Tan Binh"],
+                'paint': {
+                    'fill-color': '#c0e2a7',
+                    'fill-opacity': 0.8,
+                    'fill-outline-color': 'rgba(20, 100, 25, 1)'
+                }
+            });
+
+            map.addLayer({
+                'id': 'district_thu_duc',
+                'type': 'fill',
+                'source': 'districts',
+                'filter': ['==', ['get', 'place_id'], 199156943],
+                'paint': {
+                    'fill-color': '#e1f0b7',
+                    'fill-opacity': 0.8,
+                    'fill-outline-color': 'rgba(20, 100, 25, 1)'
+                }
+            });
+
+            map.addLayer({
+                'id': 'district_12',
+                'type': 'fill',
+                'source': 'districts',
+                'filter': ['==', ['get', 'name'], '12'],
+                'paint': {
+                    'fill-color': '#e1f0b7',
+                    'fill-opacity': 0.8,
+                    'fill-outline-color': 'rgba(20, 100, 25, 1)'
+                }
+            });
+
+            map.addLayer({
+                'id': 'district_binh_tan',
+                'type': 'fill',
+                'source': 'districts',
+                'filter': ['==', ['get', 'name'], 'Binh Tan'],
+                'paint': {
+                    'fill-color': '#e1f0b7',
+                    'fill-opacity': 0.8,
+                    'fill-outline-color': 'rgba(20, 100, 25, 1)'
                 }
             });
 
@@ -83,10 +227,11 @@
                 'id': 'district_phu_nhuan',
                 'type': 'fill',
                 'source': 'districts',
-                'filter': ['==', ['get', 'name'], "Quận Phú Nhuận"],
+                'filter': ['==', ['get', 'name'], "Phu Nhuan"],
                 'paint': {
-                    'fill-color': '#336600',
-                    'fill-opacity': 0.8
+                    'fill-color': '#70b880',
+                    'fill-opacity': 0.8,
+                    'fill-outline-color': 'rgba(20, 100, 25, 1)'
                 }
             });
 
@@ -94,10 +239,23 @@
                 'id': 'district_1',
                 'type': 'fill',
                 'source': 'districts',
-                'filter': ['==', ['get', 'name'], "District 1"],
+                'filter': ['==', ['get', 'name'], "1"],
                 'paint': {
-                    'fill-color': '#663300',
-                    'fill-opacity': 0.8
+                    'fill-color': '#93ca93',
+                    'fill-opacity': 0.8,
+                    'fill-outline-color': 'rgba(20, 100, 25, 1)'
+                }
+            });
+
+            map.addLayer({
+                'id': 'district_tan_phu',
+                'type': 'fill',
+                'source': 'districts',
+                'filter': ['==', ['get', 'name'], "Tan Phu"],
+                'paint': {
+                    'fill-color': '#93ca93',
+                    'fill-opacity': 0.8,
+                    'fill-outline-color': 'rgba(20, 100, 25, 1)'
                 }
             });
 
@@ -105,10 +263,11 @@
                 'id': 'district_3',
                 'type': 'fill',
                 'source': 'districts',
-                'filter': ['==', ['get', 'name'], "District 3"],
+                'filter': ['==', ['get', 'name'], "3"],
                 'paint': {
-                    'fill-color': '#669900',
-                    'fill-opacity': 0.8
+                    'fill-color': '#508866',
+                    'fill-opacity': 0.8,
+                    'fill-outline-color': 'rgba(20, 100, 25, 1)'
                 }
             });
 
@@ -116,10 +275,35 @@
                 'id': 'district_5',
                 'type': 'fill',
                 'source': 'districts',
-                'filter': ['==', ['get', 'name'], "District 5"],
+                'filter': ['==', ['get', 'name'], "5"],
                 'paint': {
-                    'fill-color': '#6633FF',
-                    'fill-opacity': 0.8
+                    'fill-color': '#508866',
+                    'fill-opacity': 0.8,
+                    'fill-outline-color': 'rgba(20, 100, 25, 1)'
+                }
+            });
+
+            map.addLayer({
+                'id': 'district_10',
+                'type': 'fill',
+                'source': 'districts',
+                'filter': ['==', ['get', 'name'], "10"],
+                'paint': {
+                    'fill-color': '#508866',
+                    'fill-opacity': 0.8,
+                    'fill-outline-color': 'rgba(20, 100, 25, 1)'
+                }
+            });
+
+            map.addLayer({
+                'id': 'district_11',
+                'type': 'fill',
+                'source': 'districts',
+                'filter': ['==', ['get', 'name'], "11"],
+                'paint': {
+                    'fill-color': '#508866',
+                    'fill-opacity': 0.8,
+                    'fill-outline-color': 'rgba(20, 100, 25, 1)'
                 }
             });
 
@@ -127,10 +311,35 @@
                 'id': 'district_7',
                 'type': 'fill',
                 'source': 'districts',
-                'filter': ['==', ['get', 'name'], "District 7"],
+                'filter': ['==', ['get', 'name'], "7"],
                 'paint': {
-                    'fill-color': '#990000',
-                    'fill-opacity': 0.8
+                    'fill-color': '#f7f8d2',
+                    'fill-opacity': 0.8,
+                    'fill-outline-color': 'rgba(20, 100, 25, 1)'
+                }
+            });
+
+            map.addLayer({
+                'id': 'district_go_vap',
+                'type': 'fill',
+                'source': 'districts',
+                'filter': ['==', ['get', 'name'], "Go Vap"],
+                'paint': {
+                    'fill-color': '#70b880',
+                    'fill-opacity': 0.8,
+                    'fill-outline-color': 'rgba(20, 100, 25, 1)'
+                }
+            });
+
+            map.addLayer({
+                'id': 'district_6',
+                'type': 'fill',
+                'source': 'districts',
+                'filter': ['==', ['get', 'name'], "6"],
+                'paint': {
+                    'fill-color': '#70b880',
+                    'fill-opacity': 0.8,
+                    'fill-outline-color': 'rgba(20, 100, 25, 1)'
                 }
             });
 
@@ -158,6 +367,26 @@
             map.on('mouseleave', 'all', function () {
                 map.getCanvas().style.cursor = '';
             });
+
+            var layers = ['2,549 - 9.602', '9,602 - 16,654', '16,654 - 23,706', '23,706 - 30,758', '30,758 - 37,811', '37,811 - 44,863'];
+            var colors = ['#fcfbcf', '#dbeea3', '#afde92', '#86c887', '#47ab60', '#277548'];
+
+            for (i = 0; i < layers.length; i++) {
+                var layer = layers[i];
+                var color = colors[i];
+                var item = document.createElement('div');
+                var key = document.createElement('span');
+                key.className = 'legend-key';
+                key.style.backgroundColor = color;
+
+                var value = document.createElement('span');
+                value.innerHTML = layer;
+                item.appendChild(key);
+                item.appendChild(value);
+                legend.appendChild(item);
+            }
+
+            console.log(map)
         })
     </script>
 </body>
